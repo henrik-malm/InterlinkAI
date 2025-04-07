@@ -1,48 +1,66 @@
 
 
-.mainChatContainer {
-    display:flex;
-    flex-direction: column;
-    height: 100vh; 
-    width: 100%;   
-}
-
-.chatCanvas {
-    flex-grow: 1; 
-    overflow-y: auto;
-    display: flex; 
-    flex-direction: column; 
-    background-color: black;
-  }
-
-  .chatBox {
+.outsideWrapper {
     display: flex;
-    align-items: flex-end; 
-    padding: 1;
-    border-top: 1px solid var(--color-border, #e5e7eb);
-    background-color: var(--color-bg, #fff);
-    gap: 0.5rem;
-    flex-shrink: 0; 
+    justify-content: center; 
+    height: 100vh; 
+    border: 5px solid red;
+  }
+  
+  .insideWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+  }
+  
+  .chatBox {
+      display: flex;        
+      margin-top: auto;
+      margin-bottom: 2rem;
+      width: 75%;
+  }
+  
+  .chatInputBox {
+      flex-grow: 1;           
+      border: 1px solid rgb(92, 32, 141); 
+      padding: 8px;
+      outline: none;
+      resize: none;
+      display:flex;
+      height: 5rem;
+      z-index:99;
+
+  }
+  
+  .sendButton {
+      padding: 8px 2.5rem;      
+      background-color: transparent;
+      border: 1px solid rgb(92, 32, 141); 
+    }
+  
+  /* Basic message item styling (add user/ai specific later) */
+
+  .msgCanvas {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    gap: 1rem;
   }
 
-.chatInputbox {
-    flex:1;
-    width: 70%;
-}
-
-
-.messageItem {
-    width: 60%;
-    margin-bottom: 2rem;
-    line-height: 1.5;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border: 1px rgb(111, 111, 124) solid;
-    word-wrap: break-word;
-}
-
-.usermessage {
-    background-color: transparent;
-    color:rgb(228, 220, 220);
-}
-
+  .msgItem {
+      max-width: 70%;
+      background-color:transparent;
+  }
+  
+  .userMsg { 
+      align-self: flex-start;
+      border: 2px solid rgba(0, 45, 128, 0.5);
+      padding: 1rem;
+      
+  }
+  
+  .aiMsg { 
+      align-self: flex-end;
+      background-color: none;
+  }

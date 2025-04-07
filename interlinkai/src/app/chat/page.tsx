@@ -1,100 +1,91 @@
 'use client'
-
 import styles from './page.module.css';
 import React, {useState, useRef, useEffect} from 'react';
 
-
-/* Setup a file later with types/interface in the src*/
-interface ChatMessage {
+interface ChatMsg {
     id: number;
-    sender: 'user' | 'ai';
+    sender: 'user' | 'ai'; 
     text: string;
 }
 
-
-
-
-export default function Homepage(){
-    const [message, setMessage] = useState('');
-    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-   
+export default function Chatpage(){
+    const [inputText, setInputText] = useState('');
+    const [chatMsg, setChatMsg] = useState<ChatMsg[]>([]);
+    const EndRef = useRef<HTMLDivElement>(null);
 
 
     // Handler - textarea input change
     const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setMessage(event.target.value);
+        setInputText(event.target.value);
     }
 
-    // Handler - form submission
-    const handleSendMessage = (event: React.FormEvent) => {
-        event.preventDefault();
-        const trimmedMessage = message.trim()
 
-        if (trimmedMessage === '') {
+    // Handler - form submission
+    const handleSendMsg = (event: React.FormEvent) => {
+        event.preventDefault();
+        const trimmedMsg = inputText.trim()
+
+        if (trimmedMsg === '') {
             return
         }
 
+
    // Creating a new message object for the user's message
-        const newMessage: ChatMessage = {
+        const newMsg: ChatMsg = {
             id: Date.now(),
             sender: 'user',
-            text: trimmedMessage
+            text: trimmedMsg
         }
 
+
     // Core Logic
-        setChatMessages(prevMessages => [...prevMessages, newMessage]);
-        setMessage('');
+        setChatMsg(prevMsg => [...prevMsg, newMsg]);
+        setInputText('');
     // console.log('user message:', newMessage);
 
     }
 
 
-
      // Scroll into view.    
         useEffect(() => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, [chatMessages]);
+            EndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, [chatMsg]);
 
 
     return (
-
-        <main className={styles.mainChatContainer}>
-
-            <div className={styles.chatCanvas}>
-                {chatMessages.length === 0 ? (
-                    <p className={styles.emptyChatMessage}>Type to start a new chat...</p>
-                ) : (
-                    chatMessages.map((msg) => (
-                        <div key={msg.id} className={`${styles.messageItem} ${styles.userMessage}`}>
+        <div className={styles.outsideWrapper}>
+            <div className={styles.insideWrapper}>
+                <div className={styles.msgCanvas}>
+                    {chatMsg.length === 0 ? (
+                    <p className={styles.emptyChatMsg}>Type to start a new chat...</p>
+                    ) : (
+                    chatMsg.map((msg) => (
+                        <div key={msg.id} className={`${styles.msgItem} ${msg.sender === 'user' ? styles.userMsg : styles.aiMsg}`}>
                         <p>{msg.text}</p>
                         </div>
                         ))
-                    )
-                }
-                 <div ref={messagesEndRef} />
-            </div>   
-
-            <form onSubmit={handleSendMessage} className={styles.chatBox}>          
-                <textarea
-                    id="chat-input"
-                    name="chatMessage"
-                    className={styles.chatInputBox}
-                    placeholder="Ask anything..."
-                    value={message}
-                    onChange={handleInputChange}
-                >
-                </textarea>
-                <button
-                    type="submit"
-                    className={styles.sendButton}
-                    disabled={message.trim() === ''}
-                >
-                    Send
-                </button>
-            </form>
-           
-        </main>
-      
+                    )}
+                    <div ref={EndRef}></div> 
+                </div>     
+                <form onSubmit={handleSendMsg} className={styles.chatBox}>          
+                    <textarea
+                        id="chat-input"
+                        name="chatMessage"
+                        className={styles.chatInputBox}
+                        placeholder="Ask anything..."
+                        value={inputText}
+                        onChange={handleInputChange}
+                    >
+                    </textarea>
+                    <button
+                        type="submit"
+                        className={styles.sendButton}
+                        disabled={inputText.trim() === ''}
+                    >
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
     );
   }
