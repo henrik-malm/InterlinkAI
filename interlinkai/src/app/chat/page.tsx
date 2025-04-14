@@ -97,6 +97,7 @@ export default function Chatpage(){
             const errorMsg: ChatMsg = {
                 id: Date.now() + 1, // Unique ID
                 sender: 'ai', // Display as if from AI
+
                 text: `Oops! Something went wrong. Details: ${errorMessageText}`,
                 isError: true // Set the flag for styling
             };
