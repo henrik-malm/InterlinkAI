@@ -2,24 +2,22 @@
 import styles from './page.module.css';
 import React, {useState, useRef, useEffect} from 'react';
 
-
-
-
 interface ChatMsg {
     id: number;
     sender: 'user' | 'ai';
     text: string;
+    // -- 215:20 Index: Modify error handling to display errors as AI messages.
+    // -- 215:20 "Add optional 'isError' flag to distinguish error messages for styling"
     isError?: boolean;
 }
-
-
 
 export default function Chatpage(){
     const [inputText, setInputText] = useState('');
     const [chatMsg, setChatMsg] = useState<ChatMsg[]>([]);
     const EndRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null)
+    // -- 215:20 "Remove the separate error state variable"
+    // const [error, setError] = useState<string | null>(null);
 
 
     // Handler - textarea input change
@@ -37,20 +35,19 @@ export default function Chatpage(){
             return
         }
 
+        // -- 215:20 "No longer need to clear separate error state here"
         // setError(null);
         setIsLoading(true);
 
         const newMsg: ChatMsg = {
-            id: Date.now(), // timestamp to be used as unique id 
+            id: Date.now(), // Using timestamp as a simple unique ID
             sender: 'user',
             text: trimmedMsg
         }
 
-        setChatMsg(prevMsg => [...prevMsg, newMsg]); // 
+        setChatMsg(prevMsg => [...prevMsg, newMsg]);
         setInputText('');
 
-
-        // API call for POST (user submittting message)
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -61,27 +58,24 @@ export default function Chatpage(){
             });
 
             if (!response.ok) {
-                // Doing a custom error hadnling here to try get more specific error message 
-                // Try to part the error response body as JSON , ignoring any parsin errors by our empty catch block
                 let errorData;
                 try {
                      errorData = await response.json();
                 } catch {
-                } // we ignore by having the catch empty if there is a parsin error, ie response body isnt valid JSON, let the errorData object remain undefined if so 
+                    // Ignore parsing error if body isn't JSON
+                }
                 throw new Error(errorData?.error || `API request failed with status ${response.status}`);
-                // constructor function creating error object, optional changed (in case of parsin error for instance makign it undefined, also stops at null without crashing)
-                // so we checking for error msg and if not generic fallback on returning the response stutas code instead. 
             }
 
             const data = await response.json();
 
-            if (data.reply) { // replay the airesponse text on the nextresponse object form the API 
+            if (data.reply) {
                 const aiMsg: ChatMsg = {
-                    id: Date.now() + 1, // do +1 in order to "make sure" the id is unique that used 
+                    id: Date.now() + 1, // Ensure unique ID, slightly offset from user msg
                     sender: 'ai',
                     text: data.reply
                 };
-                setChatMsg(prevMsg => [...prevMsg, aiMsg]); // 
+                setChatMsg(prevMsg => [...prevMsg, aiMsg]);
             } else {
                  throw new Error("Received response from server, but it did not contain a 'reply'.");
             }
@@ -97,6 +91,7 @@ export default function Chatpage(){
             const errorMsg: ChatMsg = {
                 id: Date.now() + 1, // Unique ID
                 sender: 'ai', // Display as if from AI
+                // -- 215:20 "Your funny/informative error message text here"
                 text: `Oops! Something went wrong. Details: ${errorMessageText}`,
                 isError: true // Set the flag for styling
             };
