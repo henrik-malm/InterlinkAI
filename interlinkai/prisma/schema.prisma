@@ -6,11 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL") // This correctly reads from .env / .env.local
+  provider = "sqlite"
+  url      = "file:./dev.db" // AWARE - Moved here cause issues reading from .env (.env.local). Adding the db file to .gitignore so not push up the chat history by accident. Temporary solution till solve the issue. 
 }
 
 // ================================================================== //
@@ -30,7 +31,7 @@ model ChatMessage {
   id        String     @id @default(cuid())
   createdAt DateTime   @default(now())
   sender    String
-  text      String     @db.Text
+  text      String     // Stores the actual message content
   isError   Boolean    @default(false)
   chatSessionId String
   session       ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)

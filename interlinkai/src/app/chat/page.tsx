@@ -1,173 +1,72 @@
-'use client'
-import styles from './page.module.css';
-import React, {useState, useRef, useEffect} from 'react';
+'use client'; // Needs to be a client component to use hooks
 
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; 
+import styles from './page.module.css'; // just reusing for now odl
 
+export default function ChatDashboardPage() {
+    const router = useRouter(); 
+    const [isCreatingChat, setIsCreatingChat] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
+    // make API call to create a new ChatSession,
+    // gets the new session ID back, and navigates to the new chat page.
+    const handleStartNewChat = async () => {
+        setIsCreatingChat(true);
+        setError(null);
+        console.log("Starting new chat...");
 
-interface ChatMsg {
-    id: number;
-    sender: 'user' | 'ai';
-    text: string;
-    isError?: boolean;
-}
-
-
-
-export default function Chatpage(){
-    const [inputText, setInputText] = useState('');
-    const [chatMsg, setChatMsg] = useState<ChatMsg[]>([]);
-    const EndRef = useRef<HTMLDivElement>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null)
-
-
-    // Handler - textarea input change
-    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setInputText(event.target.value);
-    }
-
-
-    // Handler - form submission
-    const handleSendMsg = async (event: React.FormEvent) => {
-        event.preventDefault();
-        const trimmedMsg = inputText.trim()
-
-        if (trimmedMsg === '') {
-            return
-        }
-
-        // setError(null);
-        setIsLoading(true);
-
-        const newMsg: ChatMsg = {
-            id: Date.now(), // timestamp to be used as unique id 
-            sender: 'user',
-            text: trimmedMsg
-        }
-
-        setChatMsg(prevMsg => [...prevMsg, newMsg]); // 
-        setInputText('');
-
-
-        // API call for POST (user submittting message)
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch('/api/chat/create', { // Renamed endpoint
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt: trimmedMsg }),
             });
 
             if (!response.ok) {
-                // Doing a custom error hadnling here to try get more specific error message 
-                // Try to part the error response body as JSON , ignoring any parsin errors by our empty catch block
                 let errorData;
-                try {
-                     errorData = await response.json();
-                } catch {
-                } // we ignore by having the catch empty if there is a parsin error, ie response body isnt valid JSON, let the errorData object remain undefined if so 
-                throw new Error(errorData?.error || `API request failed with status ${response.status}`);
-                // constructor function creating error object, optional changed (in case of parsin error for instance makign it undefined, also stops at null without crashing)
-                // so we checking for error msg and if not generic fallback on returning the response stutas code instead. 
+                try { errorData = await response.json(); } catch { }
+                throw new Error(errorData?.error || `Failed to create chat session (status ${response.status})`);
             }
 
             const data = await response.json();
 
-            if (data.reply) { // replay the airesponse text on the nextresponse object form the API 
-                const aiMsg: ChatMsg = {
-                    id: Date.now() + 1, // do +1 in order to "make sure" the id is unique that used 
-                    sender: 'ai',
-                    text: data.reply
-                };
-                setChatMsg(prevMsg => [...prevMsg, aiMsg]); // 
+            if (data.chatId) {
+                console.log(`API returned chatId: ${data.chatId}. Navigating...`);
+                router.push(`/chat/${data.chatId}`); // Use data.chatId
             } else {
-                 throw new Error("Received response from server, but it did not contain a 'reply'.");
+                throw new Error("API did not return a chat ID.");
             }
 
         } catch (err) {
-            // -- 215:20 "Handle errors by adding an error message to the chat state"
-            console.error("Error sending message or receiving AI reply:", err);
-
-            // -- 215:20 "Determine the error message text"
-            const errorMessageText = err instanceof Error ? err.message : "An unknown error occurred.";
-
-            // -- 215:20 "Create the error message object, marking it as an error"
-            const errorMsg: ChatMsg = {
-                id: Date.now() + 1, // Unique ID
-                sender: 'ai', // Display as if from AI
-
-                text: `Oops! Something went wrong. Details: ${errorMessageText}`,
-                isError: true // Set the flag for styling
-            };
-
-            // -- 215:20 "Add the error message to the chat display"
-            setChatMsg(prevMsg => [...prevMsg, errorMsg]);
-
-            // -- 215:20 "No longer setting the separate error state"
-            // setError(err instanceof Error ? err.message : "An unknown error occurred.");
-
-        } finally {
-            setIsLoading(false);
+            console.error("Error creating new chat:", err);
+            const message = err instanceof Error ? err.message : "An unknown error occurred.";
+            setError(message);
+            setIsCreatingChat(false);
         }
-    }
-
-
-     // Scroll into view.
-        useEffect(() => {
-            EndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, [chatMsg]);
+    };
 
 
     return (
-        <div className={styles.outsideWrapper}>
+        <div className={styles.outsideWrapper}> 
             <div className={styles.insideWrapper}>
-                <div className={styles.msgCanvas}>
-                     {/* -- 215:20 "Simplified initial message check" */}
-                    {chatMsg.length === 0 && !isLoading && (
-                       <p className={styles.emptyChatMsg}>Type to start a new chat...</p>
-                    )}
-                    {chatMsg.map((msg) => (
-                        // -- 215:20 "Conditionally add an error class based on the isError flag"
-                        <div key={msg.id} className={`${styles.msgItem} ${msg.sender === 'user' ? styles.userMsg : styles.aiMsg} ${msg.isError ? styles.errorMsg : ''}`}>
-                           <p>{msg.text}</p>
-                        </div>
-                        ))
-                    }
-                    {isLoading && (
-                         <div className={`${styles.msgItem} ${styles.aiMsg}`}>
-                             <p><i>Thinking...</i></p> {/* Basic loading text */}
-                         </div>
-                    )}
-                    {/* -- 215:20 "Remove the separate error display block" */}
-                    {/* {error && (
-                         <div className={`${styles.msgItem} ${styles.aiMsg}`} style={{ color: 'red', borderColor: 'red' }}>
-                             <p><b>Error:</b> {error}</p>
-                         </div>
-                    )} */}
-                    <div ref={EndRef}></div>
-                </div>
-                <form onSubmit={handleSendMsg} className={styles.chatBox}>
-                    <textarea
-                        id="chat-input"
-                        name="chatMessage"
-                        className={styles.chatInputBox}
-                        placeholder="Ask anything..."
-                        value={inputText}
-                        onChange={handleInputChange}
-                        disabled={isLoading}
-                    >
-                    </textarea>
-                    <button
-                        type="submit"
-                        className={styles.sendButton}
-                        disabled={inputText.trim() === '' || isLoading}
-                    >
-                        {isLoading ? 'Sending...' : 'Send'}
-                    </button>
-                </form>
+                <h1>Chat Dashboard</h1>
+                <p>Select a chat from the sidebar or start a new one.</p>
+
+                {/* Chatloghistoriken från db läggs här */}
+
+                <button
+                    onClick={handleStartNewChat}
+                    disabled={isCreatingChat}
+                    style={{ marginTop: '2rem', padding: '10px 20px' }}
+                >
+                    {isCreatingChat ? 'Starting...' : 'Start New Chat'}
+                </button>
+
+                {error && (
+                    <p style={{ color: 'red', marginTop: '1rem' }}>
+                        Error starting chat: {error}
+                    </p>
+                )}
             </div>
         </div>
     );
-  }
+}
