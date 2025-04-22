@@ -1,12 +1,16 @@
+/* ============================================================== 
+---- Reset File (custom made, includes both reset and standard styles)
+===============================================================*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #252121;
+  --foreground: #ececec;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #121212;
+    --foreground: #ececec;
   }
 }
 
@@ -40,3 +44,35 @@ a {
     color-scheme: dark;
   }
 }
+
+/* ============================================================== 
+---- Navbar ------------------------------------------------------
+===============================================================*/
+
+.topNavigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #444453;
+  width: 100%;
+  height: 50px;
+  padding: 2rem;
+}
+
+svg.logo {
+  font-size: 1rem;
+  font-weight: bold;
+  height: 100%;
+  vertical-align: center;
+}
+
+svg.logo path {
+  fill: rgb(169, 182, 247);
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+

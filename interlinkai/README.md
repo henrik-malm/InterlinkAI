@@ -1,9 +1,6 @@
-----------------------------
-0415
-----------------------------
 
-- changed the route.tsx to route.ts since it serverside and obv not gonna contain any jsx
-- SETTING UP THE DB FROM SCRATCH VIA HELP GEMININI AND YOUTUBE TUTORIAL "DEVTON" WITH GOAL TO BE ABLE TO POST AND GET CHATHISTORIES FROM THE DB. IT WILL WE EXPANDED LATER WITH MORE API MEHTODS - HOWEVER FIRST NEED TO ALSO BE ABLE UNDERSTAND CODE AND ANALYSE CODE BEFORE BUILDING ON IT. 
+Readme
+
 
 
 

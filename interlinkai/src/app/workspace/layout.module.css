@@ -1,0 +1,29 @@
+/* Layout module for workspace pages */
+.workspaceContainer {
+  display: flex;
+  height: calc(100vh - 60px); /* Adjust based on navbar height */
+  width: 100%;
+}
+
+.sidebar {
+  flex: 1;
+  max-width: 20%;
+  border-right: 1px solid #ccc;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: var(--background);
+}
+
+.separator {
+  margin: 1rem 0;
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  opacity: 0.6;
+}
+
+.mainContent {
+  flex: 4;
+  padding: 1rem;
+  overflow-y: auto;
+} 

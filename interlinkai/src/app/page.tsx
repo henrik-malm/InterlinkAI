@@ -1,17 +1,30 @@
 'use client'
 
 import Link from "next/link";
+import Image from "next/image";
+import styles from './page.module.css';
 
-export default function Home() {
-
+export default function Homepage() {
   return (
-    <main style={{ display: 'flex', flexDirection: 'column' }}>
-      <h1>Welcome!</h1>
-      <div style={{ marginTop: '2rem' }}>
-          <Link href="/chat" style={{ padding: '10px 20px', border: '1px solid grey' }}>
-              Go to Chat -&gt;
-          </Link>
+    <div className={styles.container}>
+      <Image
+        className={styles.logoImg}
+        src="/logo.png"
+        alt="AI Interlink Logo"
+        width={120}
+        height={120}
+      />
+
+      <div className={styles.outerwrapper}>
+        <div className={styles.innterwrapper}>
+          <p className={styles.logotext}>ai-Interlink</p>
+          <p className={styles.text2}>get.connected</p>
+        </div>
+        <Link href="/workspace" className={styles.chatButton}>
+              Go to Chat
+        </Link>
       </div>
-    </main>
+
+    </div>
   );
 }
