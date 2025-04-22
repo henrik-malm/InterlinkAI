@@ -4,15 +4,20 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
-}
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db" // AWARE - Moved here cause issues reading from .env (.env.local). Adding the db file to .gitignore so not push up the chat history by accident. Temporary solution till solve the issue. 
+  url      = "file:./dev.db" 
+  // AWARE - Moved here cause issues reading from .env (.env.local). Adding the db file to .gitignore so not push up the chat history by accident. Temporary solution till solve the issue. So instead of 
+  // so url = env("DATABASE_URL) is written here instead in plain text here
 }
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+// removed the output path since should not be specified running the primsa client-js 
+// using the nativ binary target , do not need to define it since it default but doing it for completness
 
 // ================================================================== //
 // --- MODEL SETUP                                                    //
@@ -22,7 +27,8 @@ model ChatSession {
   id        String     @id @default(cuid())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  // title     String? default use the first 50 chars of the first chat message
+  title     String?    
+  // Fix so now updated this field on the first post request and optimzed the GET method to fetch from here 
   modelName String? // Optional field to store e.g., 'gemini-1.5-flash-latest'
   messages  ChatMessage[]
 }
@@ -33,7 +39,8 @@ model ChatMessage {
   sender    String
   text      String     // Stores the actual message content
   isError   Boolean    @default(false)
-  chatSessionId String
+  chatSessionId String //should at a unique attribute here? also should be an int?
   session       ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
+  
   @@index([chatSessionId])
 }

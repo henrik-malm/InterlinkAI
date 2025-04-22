@@ -1,0 +1,37 @@
+/* Styles for ChatInputForm component */
+.chatBox {
+  width: 76%;
+  margin: 1rem auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chatInputBox {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #605e68;
+  background-color: transparent;
+  color: #ececec;
+  outline: none;
+  resize: none;
+  min-height: 40px;
+}
+
+.sendButton {
+  padding: 8px 1.5rem;
+  border: 1px solid #605e68;
+  background-color: transparent;
+  color: #ececec;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sendButton:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+} 

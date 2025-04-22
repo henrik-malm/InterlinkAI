@@ -1,0 +1,83 @@
+/* 
+
+/* Need to do:
+Style the scrollbars , ie both canvas and textarea // small, hidden unless active, color it bluish to blend in*/
+
+
+
+
+/* Layout styles for the chat page */
+.chatContainer {
+    display: flex;
+    height: calc(100vh - 60px); 
+    width: 100%;
+}
+
+/* Wrapper for errors, header area, etc. */
+.chatWrapper {
+    flex-shrink: 0;
+    padding: 1rem;
+}
+
+/* Main chat area*/
+.chatAreaWrapper {
+    flex: 4; /* Takes 4 parts of the space */
+    display: flex;
+    flex-direction: column; 
+    overflow: hidden; /* preventing overflow */
+}
+
+.msgCanvas {
+  flex-grow: 1;
+  overflow-y: auto; /* vertical scroll */
+  width: 100%;
+  padding: 1rem;
+  scrollbar-width: thin; 
+  scrollbar-color: rgb(60, 60, 80) transparent;
+}
+
+/* Input form box styling */
+.chatBox {
+  flex-shrink: 0; /* ADDED: Prevent input box from shrinking */
+  width: 50%; 
+  margin: 1rem auto; 
+  display: flex;
+}
+.chatInputBox {
+    flex: 1; /* allowing textarea to grow*/      
+    border: 1px solid rgb(3, 9, 39); 
+    padding: 8px;
+    outline: none; 
+    resize: none;
+    min-height: 40px; /* Ensure a minimum height */
+    
+}
+
+.sendButton {
+  padding: 8px 1.5rem;       
+  border: 1px solid rgb(33, 9, 53); 
+}
+
+/* Basic message item styling */
+
+.msgItem {
+    max-width: 70%;
+    background-color:transparent;
+}
+
+.userMsg { 
+    align-self: flex-start;
+    border: 2px solid rgba(0, 45, 128, 0.5);
+    padding: 1rem;
+    
+}
+
+.aiMsg { 
+    align-self: flex-end;
+    background-color: none;
+}
+
+.errorMsg {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}

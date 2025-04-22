@@ -1,0 +1,246 @@
+/*  Errortext
+      background-color: #f8d7da; 
+      border: 1px solid #f5c6cb; 
+      padding: 0.75rem 1.25rem; 
+      margin-bottom: 1rem;
+      border-radius: 0.25rem; 
+
+*/
+
+
+
+
+
+
+
+/* Layout styles for the workspace page */
+.workspaceContainer {
+    display: flex;
+    height: calc(100vh - 60px); /* Assuming navbar height is 60px, adjust if needed */
+    width: 100%;
+}
+
+.dashboardWrapper {
+    flex: 1; /* Takes 1 part of the space */
+    border-right: 1px solid #ccc; /* Visual separator */
+    padding: 1rem;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    background-color: #f8f8f8; /* Example background */
+    /* Keep .optionBox styles if needed within this wrapper */
+}
+
+.chatAreaWrapper {
+    flex: 4; /* Takes 4 parts of the space */
+    display: flex;
+    flex-direction: column; /* Stack canvas and input vertically */
+    overflow: hidden; /* Prevent content from spilling out */
+    /* Styles for ChatLayout within this wrapper will be inherited or need specific targeting */
+    /* e.g., if ChatLayout needs specific width/height */
+}
+
+/* Keep relevant styles for Dashboard items */
+/* Remove .optionsContainer as it's no longer used in page.tsx layout */
+/*
+.optionsContainer {
+  // ... commented out styles ...
+}
+*/
+
+.optionBox {
+  /* These styles are now used by DashboardOptions component */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  gap: 10px; /* Adjusted gap */
+  background-color: #37373b;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  text-align: center;
+  margin-bottom: 1rem; /* Add margin between items */
+}
+
+.optionBox p {
+  margin: 0;
+  font-size: 0.9rem; /* Adjusted font size */
+  color: #555;
+  line-height: 1.3;
+}
+
+.startButton {
+  padding: 8px 16px; /* Adjusted padding */
+  font-size: 0.95rem; /* Adjusted font size */
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 8px; /* Adjusted margin */
+}
+
+.startButton:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.startButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.optionBox img {
+  width: 40px; /* Adjusted size */
+  height: 40px;
+  opacity: 0.8;
+}
+
+/* Comment out old wrappers */
+/*
+.outsideWrapper {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.insideWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    gap: 40px;
+    text-align: center;
+}
+*/
+
+/* Welcome screen styles for the workspace page */
+.dashboardPage {
+  height: calc(100vh - 60px); /* adjust for navbar height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem; /* space between options and form */
+  background-color: #121212; /* dark background */
+  color: #ececec;
+}
+
+.texts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  gap: 40px;
+  text-align: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0.2;
+}
+
+.logo h1 {
+  font-size: 64px;
+  background: linear-gradient(to right, #217bfe, #e55571);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.options {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 50px;
+  margin-bottom: 2rem; /* extra space below options */
+}
+
+.option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #555;
+  border-radius: 20px;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.option:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.option svg {
+  width: 48px;
+  height: 48px;
+  color: #ececec;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+  background-color: #2c2937;
+  border-radius: 20px;
+  display: flex;
+  padding: 10px 20px;
+}
+
+.formContainer form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.formContainer input {
+  flex: 1;
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #ececec;
+}
+
+.formContainer button {
+  background-color: #605e68;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formContainer button img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Spacing between placeholder links in DashboardOptions */
+.optionBox ul {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+   display: flex;
+   flex-direction: column;
+   gap: 0.5rem;
+}
+
+
+
+
